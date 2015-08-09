@@ -1,3 +1,3 @@
-# Slab DB
+# Slab CLI
 
-The Slab Database component. Build and execute queries with ease. See http://www.wp-slab.com/components/db for more information.
+The Slab Command Line component. Create and execute commands against your site. See http://www.wp-slab.com/components/cli for more information.

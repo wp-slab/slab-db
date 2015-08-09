@@ -1,4 +1,4 @@
-=== Slab DB ===
+=== Slab CLI ===
 Contributors: Dachande663
 Donate link: http://www.wp-slab.com
 Tags: slab, framework, dev
@@ -7,12 +7,12 @@ Tested up to: 4.2.2
 Stable tag: master
 License: MIT/Commercial
 
-The Slab Database component. Build and execute queries with ease.
+The Slab Command Line component. Create and execute commands against your site.
 
 
 == Description ==
 
-The Slab Database component. Build and execute queries with ease. See http://www.wp-slab.com/components/db for more information.
+The Slab Command Line component. Create and execute commands against your site. See http://www.wp-slab.com/components/cli for more information.
 
 
 == Installation ==
@@ -22,7 +22,7 @@ The Slab Database component. Build and execute queries with ease. See http://www
 
 == Frequently Asked Questions ==
 
-Documentation can be found on the official Slab website, http://www.wp-slab.com/components/db.
+Documentation can be found on the official Slab website, http://www.wp-slab.com/components/cli.
 
 
 == Screenshots ==
@@ -32,8 +32,8 @@ No screenshots are available.
 
 == Changelog ==
 
-= 1.0.0 (2015-08-08) =
-* V2 public release
+= 1.0.0 (2015-08-09) =
+* V1 public release
 
 
 == Upgrade Notice ==

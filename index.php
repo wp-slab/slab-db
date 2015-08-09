@@ -1,31 +1,31 @@
 <?php
 /*
-Plugin Name: Slab &mdash; DB
-Plugin URI: http://www.wp-slab.com/components/db
-Description: The Slab Database component. Build and execute queries with ease.
+Plugin Name: Slab &mdash; CLI
+Plugin URI: http://www.wp-slab.com/components/cli
+Description: The Slab Command Line component. Create and execute commands against your site.
 Version: 1.0.0
 Author: Slab
 Author URI: http://www.wp-slab.com
-Created: 2014-06-30
-Updated: 2015-08-08
-Repo URI: github.com/wp-slab/slab-db
+Created: 2015-08-09
+Updated: 2015-08-09
+Repo URI: github.com/wp-slab/slab-cli
 Requires: slab-core
 */
 
 
 // Define
-define('SLAB_DB_INIT', true);
-define('SLAB_DB_DIR', plugin_dir_path(__FILE__));
-define('SLAB_DB_URL', plugin_dir_url(__FILE__));
+define('SLAB_CLI_INIT', true);
+define('SLAB_CLI_DIR', plugin_dir_path(__FILE__));
+define('SLAB_CLI_URL', plugin_dir_url(__FILE__));
 
 
 // Hooks
-add_action('slab_init', 'slab_db_init');
+add_action('slab_init', 'slab_cli_init');
 
 
 // Init
-function slab_db_init($slab) {
+function slab_cli_init($slab) {
 
-	$slab->autoloader->registerNamespace('Slab\\DB', SLAB_DB_DIR . 'src');
+	$slab->autoloader->registerNamespace('Slab\\Cli', SLAB_CLI_DIR . 'src');
 
 }
