@@ -26,6 +26,6 @@ add_action('slab_init', 'slab_db_init');
 // Init
 function slab_db_init($slab) {
 
-	$slab->autoloader->registerNamespace('Slab\\DB', SLAB_DB_DIR . 'src');
+	$slab->autoloader->registerNamespace('Slab\DB', SLAB_DB_DIR . 'src');
 
 }
