@@ -19,13 +19,9 @@ define('SLAB_DB_DIR', plugin_dir_path(__FILE__));
 define('SLAB_DB_URL', plugin_dir_url(__FILE__));
 
 
+// Includes
+include SLAB_DB_DIR . 'functions.php';
+
+
 // Hooks
-add_action('slab_init', 'slab_db_init');
-
-
-// Init
-function slab_db_init($slab) {
-
-	$slab->autoloader->registerNamespace('Slab\DB', SLAB_DB_DIR . 'src');
-
-}
+add_action('slab_init', 'Slab\DB\slab_db_init');
