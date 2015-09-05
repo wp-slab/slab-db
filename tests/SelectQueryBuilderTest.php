@@ -2,7 +2,7 @@
 
 use Mockery as m;
 
-use Slab\DB\Query\SelectQuery;
+use Slab\DB\QueryBuilder\SelectQueryBuilder;
 
 /**
  * Test SelectQuery
@@ -21,10 +21,11 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	public function testCanInstantiateQuery() {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
+		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
 
-		$query = new SelectQuery($db);
+		$query = new SelectQueryBuilder($db, $compiler);
 
-		$this->assertInstanceOf('Slab\DB\Query\SelectQuery', $query);
+		$this->assertInstanceOf('Slab\DB\QueryBuilder\SelectQueryBuilder', $query);
 
 	}
 
@@ -38,8 +39,9 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	public function testSelect() {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
+		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
 
-		$query = new SelectQuery($db);
+		$query = new SelectQueryBuilder($db, $compiler);
 		$query->select('id', 'name');
 
 		$this->assertAttributeEquals(['id', 'name'], 'selects', $query);
@@ -57,7 +59,10 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
 
-		$query = new SelectQuery($db);
+		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
+		$compiler->shouldReceive('compileSelect')->once()->andReturn('select `id`, `name` from my_table');
+
+		$query = new SelectQueryBuilder($db, $compiler);
 		$query->select('id', 'name');
 		$query->from('my_table');
 
