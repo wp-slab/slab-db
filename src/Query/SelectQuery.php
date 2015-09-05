@@ -4,7 +4,7 @@ namespace Slab\DB\Query;
 
 use LogicException;
 
-use Slab\DB\DatabaseConnection;
+use Slab\DB\Connections\ConnectionInterface;
 
 /**
  * Select Query
@@ -14,6 +14,12 @@ use Slab\DB\DatabaseConnection;
  **/
 // class SelectQuery extends BaseWhereQuery {
 class SelectQuery {
+
+
+	/**
+	 * @var Slab\DB\Connections\ConnectionInterface
+	 **/
+	protected $db;
 
 
 	/**
@@ -68,6 +74,20 @@ class SelectQuery {
 	 * @var int Offset
 	 **/
 	protected $offset = null;
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param Slab\DB\Connections\ConnectionInterface
+	 * @return void
+	 **/
+	public function __construct(ConnectionInterface $db) {
+
+		$this->db = $db;
+
+	}
+
 
 
 	/**
@@ -445,7 +465,19 @@ class SelectQuery {
 	 **/
 	public function sql() {
 
-		return '@todo generate SQL';
+		$compiler = new \Slab\DB\Compilers\MysqlCompiler($this->db);
+
+		return $compiler->compileSelect([
+			'from'   => $this->from,
+			'select' => $this->selects,
+			'join'   => $this->joins,
+			'where'  => $this->wheres,
+			'having' => $this->havings,
+			'order'  => $this->orders,
+			'group'  => $this->groups,
+			'limit'  => $this->limit,
+			'offset' => $this->offset,
+		]);
 
 	}
 
