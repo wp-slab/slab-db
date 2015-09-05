@@ -2,6 +2,8 @@
 
 namespace Slab\DB;
 
+use Slab\DB\Query\SelectQuery;
+
 /**
  * Database Connection Manager
  *
@@ -10,6 +12,38 @@ namespace Slab\DB;
  **/
 class DatabaseManager {
 
+
+	/**
+	 * Get a database connection
+	 *
+	 * @return Slab\DB\DatabaseConnection
+	 **/
+	public function connection($group = null) {
+
+		return new DatabaseConnection;
+
+	}
+
+
+
+	/**
+	 * Make a Select Query
+	 *
+	 * @return Slab\DB\Query\SelectQuery
+	 **/
+	public function select($field = null) {
+
+		$conn = $this->connection();
+
+		$query = new SelectQuery($conn);
+
+		// if($field !== null) {
+		// 	$query->selects(func_get_args());
+		// }
+
+		return $query;
+
+	}
 
 
 
