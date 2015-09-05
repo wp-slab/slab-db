@@ -25,7 +25,7 @@ class SelectQuery {
 	/**
 	 * @var array Select field expressions
 	 **/
-	protected $select = [];
+	protected $selects = [];
 
 
 	/**
@@ -112,7 +112,7 @@ class SelectQuery {
 	 **/
 	public function addSelect($field) {
 
-		$this->select[] = $field; // @todo check?
+		$this->selects[] = $field; // @todo check?
 
 		return $this;
 
