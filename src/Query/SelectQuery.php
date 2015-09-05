@@ -2,6 +2,8 @@
 
 namespace Slab\DB\Query;
 
+use LogicException;
+
 use Slab\DB\DatabaseConnection;
 
 /**
@@ -15,12 +17,102 @@ class SelectQuery {
 
 
 	/**
+	 * @var mixed From table expression
+	 **/
+	protected $from;
+
+
+	/**
+	 * @var array Select field expressions
+	 **/
+	protected $select = [];
+
+
+	/**
+	 * @var array Join expressions
+	 **/
+	protected $joins = [];
+
+
+	/**
+	 * @var array Where conditions
+	 **/
+	protected $wheres = [];
+
+
+	/**
+	 * @var array Having conditions
+	 **/
+	protected $havings = [];
+
+
+	/**
+	 * @var array Orders
+	 **/
+	protected $orders = [];
+
+
+	/**
+	 * @var array Groups
+	 **/
+	protected $groups = [];
+
+
+	/**
+	 * @var int Limit
+	 **/
+	protected $limit = null;
+
+
+	/**
+	 * @var int Offset
+	 **/
+	protected $offset = null;
+
+
+	/**
 	 * Set select fields
 	 *
-	 * @param mixed Field
+	 * @param mixed Field expression
 	 * @return self
 	 **/
 	public function select() {
+
+		$this->select = []; // reset select fields
+
+		return $this->addSelects(func_get_args());
+
+	}
+
+
+
+	/**
+	 * Add multiple select fields
+	 *
+	 * @param array Field expressions
+	 * @return self
+	 **/
+	public function addSelects(array $fields) {
+
+		foreach($fields as $field) {
+			$this->addSelect($field);
+		}
+
+		return $this;
+
+	}
+
+
+
+	/**
+	 * Add a select field
+	 *
+	 * @param mixed Field expression
+	 * @return self
+	 **/
+	public function addSelect($field) {
+
+		$this->select[] = $field; // @todo check?
 
 		return $this;
 
@@ -31,10 +123,12 @@ class SelectQuery {
 	/**
 	 * Set from table
 	 *
-	 * @param mixed Table
+	 * @param mixed Table expression
 	 * @return self
 	 **/
 	public function from($table) {
+
+		$this->from = $table;
 
 		return $this;
 
@@ -50,6 +144,8 @@ class SelectQuery {
 	 * @return self
 	 **/
 	public function join($table, $type = null) {
+
+		$this->joins[] = [$table, $type, null];
 
 		return $this;
 
@@ -81,6 +177,14 @@ class SelectQuery {
 	 **/
 	public function on($field1, $operator = null, $field2 = null) {
 
+		if(empty($this->joins)) {
+			throw new LogicException('A join must be created before on conditions can be added');
+		}
+
+		$index = count($this->joins) - 1;
+
+		$this->joins[$index][2] = [$field1, $operator, $field2];
+
 		return $this;
 
 	}
@@ -96,6 +200,8 @@ class SelectQuery {
 	 * @return self
 	 **/
 	public function where($expr, $operator = null, $value = null) {
+
+		$this->wheres[] = [$expr, $operator, $value];
 
 		return $this;
 
@@ -113,6 +219,8 @@ class SelectQuery {
 	 **/
 	public function orWhere($expr, $operator = null, $value = null) {
 
+		// @todo
+
 		return $this;
 
 	}
@@ -127,6 +235,8 @@ class SelectQuery {
 	 **/
 	public function whereNull($field) {
 
+		$this->wheres[] = [$expr, 'is null', null];
+
 		return $this;
 
 	}
@@ -140,6 +250,8 @@ class SelectQuery {
 	 * @return self
 	 **/
 	public function whereNotNull($field) {
+
+		$this->wheres[] = [$expr, 'is not null', null];
 
 		return $this;
 
@@ -157,6 +269,8 @@ class SelectQuery {
 	 **/
 	public function whereBetween($field, $min, $max) {
 
+		$this->wheres[] = [$expr, 'between', [$min, $max]];
+
 		return $this;
 
 	}
@@ -173,6 +287,8 @@ class SelectQuery {
 	 **/
 	public function whereNotBetween($field, $min, $max) {
 
+		$this->wheres[] = [$expr, 'not between', [$min, $max]];
+
 		return $this;
 
 	}
@@ -188,6 +304,8 @@ class SelectQuery {
 	 **/
 	public function whereIn($field, array $values) {
 
+		$this->wheres[] = [$expr, 'in', $values];
+
 		return $this;
 
 	}
@@ -202,6 +320,8 @@ class SelectQuery {
 	 * @return self
 	 **/
 	public function whereNotIn($field, array $values) {
+
+		$this->wheres[] = [$expr, 'not in', $values];
 
 		return $this;
 
@@ -219,6 +339,8 @@ class SelectQuery {
 	 **/
 	public function having($field, $operator = null, $value = null) {
 
+		$this->havings[] = [$field, $operator, $value];
+
 		return $this;
 
 	}
@@ -235,6 +357,12 @@ class SelectQuery {
 	 **/
 	public function orderBy($column, $order = 'ASC', $append = false) {
 
+		if($append === true) {
+			$this->orders[] = [$column, $order];
+		} else {
+			$this->orders = [[$column, $order]];
+		}
+
 		return $this;
 
 	}
@@ -248,6 +376,8 @@ class SelectQuery {
 	 * @return self
 	 **/
 	public function groupBy($column) {
+
+		$this->groups[] = $column;
 
 		return $this;
 
@@ -267,6 +397,8 @@ class SelectQuery {
 			$this->offset($offset);
 		}
 
+		$this->limit = max(1, intval($limit));
+
 		return $this;
 
 	}
@@ -281,7 +413,26 @@ class SelectQuery {
 	 **/
 	public function offset($offset) {
 
+		$this->offset = max(0, intval($offset));
+
 		return $this;
+
+	}
+
+
+
+	/**
+	 * Escape a raw SQL fragment
+	 *
+	 * @param string Raw SQL
+	 * @param mixed Params
+	 * @return string Escaped SQL
+	 **/
+	public function raw($sql) {
+
+		// @todo escape func_get_args
+
+		return $sql;
 
 	}
 
@@ -300,24 +451,42 @@ class SelectQuery {
 
 
 
-	// get
-	// first
-	// col
+	/**
+	 * Get all results
+	 *
+	 * @return array Collection
+	 **/
+	public function get() {
+
+		return [];
+
+	}
 
 
 
 	/**
-	 * Escape a raw SQL fragment
+	 * Get first row
 	 *
-	 * @param string Raw SQL
-	 * @param mixed Params
-	 * @return string Escaped SQL
+	 * @return object Row
 	 **/
-	public function raw($sql) {
+	public function first() {
 
-		// @todo escape func_get_args
+		return null;
 
-		return $sql;
+	}
+
+
+
+	/**
+	 * Get a column, optionally keyed
+	 *
+	 * @param string Column
+	 * @param string Key
+	 * @return array Column
+	 **/
+	public function col($column = null, $key = null) {
+
+		return [];
 
 	}
 

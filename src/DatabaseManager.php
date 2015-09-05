@@ -37,9 +37,9 @@ class DatabaseManager {
 
 		$query = new SelectQuery($conn);
 
-		// if($field !== null) {
-		// 	$query->selects(func_get_args());
-		// }
+		if($field !== null) {
+			$query->addSelects(func_get_args());
+		}
 
 		return $query;
 
