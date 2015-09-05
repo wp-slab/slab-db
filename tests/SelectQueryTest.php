@@ -20,7 +20,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	 **/
 	public function testCanInstantiateQuery() {
 
-		$db = m::mock('Slab\DB\DatabaseConnection');
+		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
 
 		$query = new SelectQuery($db);
 
@@ -37,7 +37,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	 **/
 	public function testSelect() {
 
-		$db = m::mock('Slab\DB\DatabaseConnection');
+		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
 
 		$query = new SelectQuery($db);
 		$query->select('id', 'name');
@@ -55,7 +55,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	 **/
 	public function testBasicQuery() {
 
-		$db = m::mock('Slab\DB\DatabaseConnection');
+		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
 
 		$query = new SelectQuery($db);
 		$query->select('id', 'name');
