@@ -61,7 +61,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 		$query->select('id', 'name');
 		$query->from('my_table');
 
-		$this->assertEquals('select id, name from my_table', $query->sql());
+		$this->assertEquals('select `id`, `name` from my_table', $query->sql());
 
 	}
 
