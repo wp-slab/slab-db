@@ -88,9 +88,9 @@ class MysqlCompiler implements CompilerInterface {
 		foreach($select as $select) {
 
 			if(is_string($select)) {
-				$cols[] = $select; // @todo escape
+				$cols[] = "`$select`"; // @todo escape
 			} elseif(is_array($select)) {
-				$cols[] = "{$select[0]} as {$select[1]}"; // @todo escape
+				$cols[] = "`{$select[0]}` as `{$select[1]}`"; // @todo escape
 			} elseif(is_a($select, 'Closure')) {
 				$cols[] = $select->__invoke(); // @todo pass db
 			}

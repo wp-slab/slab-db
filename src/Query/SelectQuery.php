@@ -98,7 +98,7 @@ class SelectQuery {
 	 **/
 	public function select() {
 
-		$this->select = []; // reset select fields
+		$this->selects = []; // reset select fields
 
 		return $this->addSelects(func_get_args());
 
@@ -490,7 +490,9 @@ class SelectQuery {
 	 **/
 	public function get() {
 
-		return [];
+		$sql = $this->sql();
+
+		return $this->db->query($sql);
 
 	}
 
@@ -503,7 +505,11 @@ class SelectQuery {
 	 **/
 	public function first() {
 
-		return null;
+		$this->limit(1);
+
+		$rows = $this->get();
+
+		return !empty($rows[0]) ? $rows[0] : null;
 
 	}
 
@@ -516,9 +522,29 @@ class SelectQuery {
 	 * @param string Key
 	 * @return array Column
 	 **/
-	public function col($column = null, $key = null) {
+	public function col($column, $key = null) {
 
-		return [];
+		if($key === null) {
+			$this->select([$column, 'value']);
+		} else {
+			$this->select([$column, 'value'], [$key, 'key']);
+		}
+
+		$rows = $this->get();
+
+		$output = [];
+
+		foreach($rows as $row) {
+
+			if($key === null) {
+				$output[] = $row->value;
+			} else {
+				$output[$row->key] = $row->value;
+			}
+
+		}
+
+		return $output;
 
 	}
 

@@ -21,6 +21,23 @@ class PdoConnection implements ConnectionInterface {
 	public function getCompiler() {
 
 		return new MysqlCompiler($this);
+
+	}
+
+
+
+	/**
+	 * Execute a query
+	 *
+	 * @param string SQL
+	 * @return array Rows
+	 **/
+	public function query($sql) {
+
+		global $wpdb; // @todo obvs replace with PDO connection
+
+		return $wpdb->get_results($sql);
+
 	}
 
 
