@@ -1,16 +1,16 @@
 <?php
 
-namespace Slab\DB\Query;
+namespace Slab\DB\QueryBuilder;
 
 use Slab\DB\DatabaseConnection;
 
 /**
- * Base Query
+ * Base Query Builder
  *
  * @package default
  * @author Luke Lanchester
  **/
-abstract class BaseQuery {
+abstract class BaseQueryBuilder {
 
 
 	/**

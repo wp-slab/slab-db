@@ -1,16 +1,16 @@
 <?php
 
-namespace Slab\DB\Query;
+namespace Slab\DB\QueryBuilder;
 
 use Slab\DB\DatabaseConnection;
 
 /**
- * Base Where Query
+ * Base Where Query Builder
  *
  * @package default
  * @author Luke Lanchester
  **/
-abstract class BaseWhereQuery extends BaseQuery {
+abstract class BaseWhereQueryBuilder extends BaseQueryBuilder {
 
 	// where
 	// order_by

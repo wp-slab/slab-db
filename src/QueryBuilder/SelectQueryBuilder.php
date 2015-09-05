@@ -1,9 +1,10 @@
 <?php
 
-namespace Slab\DB\Query;
+namespace Slab\DB\QueryBuilder;
 
 use LogicException;
 
+use Slab\DB\Compilers\CompilerInterface;
 use Slab\DB\Connections\ConnectionInterface;
 
 /**
@@ -13,13 +14,19 @@ use Slab\DB\Connections\ConnectionInterface;
  * @author Luke Lanchester
  **/
 // class SelectQuery extends BaseWhereQuery {
-class SelectQuery {
+class SelectQueryBuilder {
 
 
 	/**
 	 * @var Slab\DB\Connections\ConnectionInterface
 	 **/
 	protected $db;
+
+
+	/**
+	 * @var Slab\DB\Compilers\CompilerInterface
+	 **/
+	protected $compiler;
 
 
 	/**
@@ -80,18 +87,20 @@ class SelectQuery {
 	 * Constructor
 	 *
 	 * @param Slab\DB\Connections\ConnectionInterface
+	 * @param Slab\DB\Compilers\CompilerInterface
 	 * @return void
 	 **/
-	public function __construct(ConnectionInterface $db) {
+	public function __construct(ConnectionInterface $db, CompilerInterface $compiler) {
 
 		$this->db = $db;
+		$this->compiler = $compiler;
 
 	}
 
 
 
 	/**
-	 * Set select fields
+	 * Overwrite select fields
 	 *
 	 * @param mixed Field expression
 	 * @return self
@@ -214,7 +223,7 @@ class SelectQuery {
 	/**
 	 * Add a where condition
 	 *
-	 * @param mixed Expression or field
+	 * @param mixed Field or where expression
 	 * @param string Operator
 	 * @param mixed Value
 	 * @return self
@@ -222,24 +231,6 @@ class SelectQuery {
 	public function where($expr, $operator = null, $value = null) {
 
 		$this->wheres[] = [$expr, $operator, $value];
-
-		return $this;
-
-	}
-
-
-
-	/**
-	 * Add an or condition
-	 *
-	 * @param mixed Expression or field
-	 * @param string Operator
-	 * @param mixed Value
-	 * @return self
-	 **/
-	public function orWhere($expr, $operator = null, $value = null) {
-
-		// @todo
 
 		return $this;
 
@@ -352,7 +343,7 @@ class SelectQuery {
 	/**
 	 * Add a having clasure
 	 *
-	 * @param mixed Field
+	 * @param mixed Field or where expression
 	 * @param string Operator
 	 * @param mixed Value
 	 * @return self
@@ -375,7 +366,7 @@ class SelectQuery {
 	 * @param bool Append?
 	 * @return self
 	 **/
-	public function orderBy($column, $order = 'ASC', $append = false) {
+	public function orderBy($column, $order = 'asc', $append = false) {
 
 		if($append === true) {
 			$this->orders[] = [$column, $order];
@@ -450,7 +441,13 @@ class SelectQuery {
 	 **/
 	public function raw($sql) {
 
+
 		// @todo escape func_get_args
+
+
+		return function($sql) {
+
+		};
 
 		return $sql;
 
@@ -465,9 +462,9 @@ class SelectQuery {
 	 **/
 	public function sql() {
 
-		$compiler = new \Slab\DB\Compilers\MysqlCompiler($this->db);
+		// $compiler = new \Slab\DB\Compilers\MysqlCompiler($this->db);
 
-		return $compiler->compileSelect([
+		return $this->compiler->compileSelect([
 			'from'   => $this->from,
 			'select' => $this->selects,
 			'join'   => $this->joins,

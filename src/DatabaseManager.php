@@ -3,7 +3,7 @@
 namespace Slab\DB;
 
 use Slab\DB\Connections\PdoConnection;
-use Slab\DB\Query\SelectQuery;
+use Slab\DB\QueryBuilder\SelectQueryBuilder;
 
 /**
  * Database Connection Manager
@@ -30,14 +30,14 @@ class DatabaseManager {
 	/**
 	 * Make a Select Query
 	 *
-	 * @return Slab\DB\Query\SelectQuery
+	 * @return Slab\DB\QueryBuilder\SelectQueryBuilder
 	 **/
 	public function select($field = null) {
 
 		$connection = $this->connection();
 		$compiler = $connection->getCompiler();
 
-		$query = new SelectQuery($connection, $compiler);
+		$query = new SelectQueryBuilder($connection, $compiler);
 
 		if($field !== null) {
 			$query->addSelects(func_get_args());
