@@ -74,7 +74,7 @@ class MysqlCompiler implements CompilerInterface {
 	/**
 	 * Compile select clause
 	 *
-	 * @param array Select
+	 * @param array Selects
 	 * @return string SQL part
 	 **/
 	public function compileSelectClause(array $select) {
@@ -84,7 +84,6 @@ class MysqlCompiler implements CompilerInterface {
 		}
 
 		$cols = [];
-
 
 		foreach($select as $select) {
 
@@ -127,10 +126,36 @@ class MysqlCompiler implements CompilerInterface {
 	/**
 	 * Compile join clauses
 	 *
-	 * @param array JoinCl
+	 * @param array Joins
 	 * @return string SQL part
 	 **/
 	public function compileJoinClauses($joins) {
+
+		if(empty($joins)) {
+			return null;
+		}
+
+		$sql = [];
+
+		foreach($joins as $join) {
+			$sql[] = $this->compileJoinClause($join);
+		}
+
+		return implode(' ', $sql);
+
+	}
+
+
+
+	/**
+	 * Compile join clause
+	 *
+	 * @param array Join
+	 * @return string SQL part
+	 **/
+	public function compileJoinClause($join) {
+
+		return "{$join[1]} join {$join[0]} on {$join[2][0]} {$join[2][1]} {$join[2][2]}";
 
 	}
 
@@ -139,10 +164,22 @@ class MysqlCompiler implements CompilerInterface {
 	/**
 	 * Compile whereclauses
 	 *
-	 * @param array WhereC
+	 * @param array Wheres
 	 * @return string SQL part
 	 **/
 	public function compileWhereClauses($wheres) {
+
+		if(empty($wheres)) {
+			return null;
+		}
+
+		$sql = [];
+
+		foreach($wheres as $where) {
+			$sql[] = "{$where[0]} {$where[1]} {$where[2]}";
+		}
+
+		return 'where ' . implode(' and ', $sql);
 
 	}
 
@@ -156,6 +193,18 @@ class MysqlCompiler implements CompilerInterface {
 	 **/
 	public function compileGroupByClauses($group_bys) {
 
+		if(empty($wheres)) {
+			return null;
+		}
+
+		$sql = [];
+
+		foreach($group_bys as $group_by) {
+			$sql[] = $group_by;
+		}
+
+		return 'group by ' . implode(', ', $sql);
+
 	}
 
 
@@ -168,6 +217,18 @@ class MysqlCompiler implements CompilerInterface {
 	 **/
 	public function compileHavingClauses($havings) {
 
+		if(empty($wheres)) {
+			return null;
+		}
+
+		$sql = [];
+
+		foreach($havings as $having) {
+			$sql[] = "{$having[0]} {$having[1]} {$having[2]}";
+		}
+
+		return 'having ' . implode(' and ', $sql);
+
 	}
 
 
@@ -179,6 +240,18 @@ class MysqlCompiler implements CompilerInterface {
 	 * @return string SQL part
 	 **/
 	public function compileOrderByClauses($orders) {
+
+		if(empty($orders)) {
+			return null;
+		}
+
+		$sql = [];
+
+		foreach($orders as $order) {
+			$sql[] = "{$order[0]} {$order[1]}";
+		}
+
+		return 'order by ' . implode(', ', $sql);
 
 	}
 
