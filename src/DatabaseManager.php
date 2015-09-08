@@ -2,7 +2,7 @@
 
 namespace Slab\DB;
 
-use Slab\DB\Connections\PdoConnection;
+use Slab\DB\Connections\WpdbConnection;
 use Slab\DB\QueryBuilder\SelectQueryBuilder;
 
 /**
@@ -21,7 +21,7 @@ class DatabaseManager {
 	 **/
 	public function connection($group = null) {
 
-		return new PdoConnection;
+		return new WpdbConnection;
 
 	}
 
