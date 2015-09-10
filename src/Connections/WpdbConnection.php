@@ -52,9 +52,15 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query values
-	 * @return array [int Rows affected, int Insert ID]
+	 * @return array Rows
 	 **/
 	public function select($sql, array $values = null) {
+
+		if($values !== null) {
+			$sql = $this->escapeQuery($sql, $values);
+		}
+
+		return $this->getConnection()->get_results($sql);
 
 	}
 
@@ -94,6 +100,24 @@ class WpdbConnection implements ConnectionInterface {
 	 * @return int Rows affected
 	 **/
 	public function delete($sql, array $values = null) {
+
+	}
+
+
+
+	/**
+	 * Escape an sql query
+	 *
+	 * @param string Query
+	 * @return array Values
+	 **/
+	public function escapeQuery($sql, array $values = null) {
+
+		if($values === null) {
+			return $sql;
+		}
+
+		return $this->getConnection()->prepare($sql, $values);
 
 	}
 
