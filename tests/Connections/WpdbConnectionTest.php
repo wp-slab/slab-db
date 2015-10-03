@@ -258,6 +258,219 @@ class WpdbConnectionTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
+	 * Test a select query
+	 *
+	 * @return void
+	 **/
+	public function testSelectQuery() {
+
+		$raw_sql = 'select name from people';
+		$expected_results = [['one']];
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('get_results')->once()->with($raw_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->select($raw_sql);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test a select query with params
+	 *
+	 * @return void
+	 **/
+	public function testSelectQueryParams() {
+
+		$raw_sql = 'select name from people where name = %s and age = %d';
+		$raw_params = ['john', 19];
+		$expected_sql = 'select name from people where name = "john" and age = 19';
+		$expected_results = [['one']];
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('get_results')->once()->with($expected_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->select($raw_sql, $raw_params);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test an insert query
+	 *
+	 * @return void
+	 **/
+	public function testInsertQuery() {
+
+		$raw_sql = 'insert into people (name, age) values ("john", 19), ("andy", 17)';
+		$expected_results = [2, 123];
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('query')->once()->with($raw_sql)->andSet('insert_id', $expected_results[1])->andReturn($expected_results[0]);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->insert($raw_sql);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test an insert query with params
+	 *
+	 * @return void
+	 **/
+	public function testInsertQueryParams() {
+
+		$raw_sql = 'insert into people (name, age) values (%s, %d), (%s, %d)';
+		$raw_params = ['john', 19, 'andy', 17];
+		$expected_sql = 'insert into people (name, age) values ("john", 19), ("andy", 17)';
+		$expected_results = [2, 123];
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('query')->once()->with($expected_sql)->andSet('insert_id', $expected_results[1])->andReturn($expected_results[0]);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->insert($raw_sql, $raw_params);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test an insert query with params but no insert id
+	 *
+	 * @return void
+	 **/
+	public function testInsertQueryParamsNoId() {
+
+		$raw_sql = 'insert into people (name, age) values (%s, %d), (%s, %d)';
+		$raw_params = ['john', 19, 'andy', 17];
+		$expected_sql = 'insert into people (name, age) values ("john", 19), ("andy", 17)';
+		$expected_results = [2, null];
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('query')->once()->with($expected_sql)->andReturn($expected_results[0]);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->insert($raw_sql, $raw_params, false);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test an update query
+	 *
+	 * @return void
+	 **/
+	public function testUpdateQuery() {
+
+		$raw_sql = 'update people set age = 17 where age > 21';
+		$expected_results = 2;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('query')->once()->with($raw_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->update($raw_sql);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test an update query with params
+	 *
+	 * @return void
+	 **/
+	public function testUpdateQueryParams() {
+
+		$raw_sql = 'update people set age = %d where age > %d';
+		$raw_params = [17, 21];
+		$expected_sql = 'update people set age = 17 where age > 21';
+		$expected_results = 2;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('query')->once()->with($expected_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->query($raw_sql, $raw_params);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test a delete query
+	 *
+	 * @return void
+	 **/
+	public function testDeleteQuery() {
+
+		$raw_sql = 'delete from people where age > 21';
+		$expected_results = 2;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('query')->once()->with($raw_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->delete($raw_sql);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test a delete query with params
+	 *
+	 * @return void
+	 **/
+	public function testDeleteQueryParams() {
+
+		$raw_sql = 'delete from people where age > %d';
+		$raw_params = [21];
+		$expected_sql = 'delete from people where age > 21';
+		$expected_results = 2;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('query')->once()->with($expected_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->delete($raw_sql, $raw_params);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
 	 * Tear down tests
 	 *
 	 * @return void
