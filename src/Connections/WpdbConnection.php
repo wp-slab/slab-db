@@ -2,6 +2,7 @@
 
 namespace Slab\DB\Connections;
 
+use RuntimeException;
 use wpdb;
 
 use Slab\DB\Compilers\MysqlCompiler;
@@ -201,6 +202,18 @@ class WpdbConnection implements ConnectionInterface {
 	 **/
 	public function escapeTable($table) {
 
+		if(is_a($table, 'Closure')) {
+			return $table->__invoke($this);
+		}
+
+		if(is_array($table)) {
+			if(!empty($table[0]) and !empty($table[1])) {
+				return "`{$table[0]}` as `{$table[1]}`";
+			} else {
+				throw new RuntimeException('Table aliases must have two parameters');
+			}
+		}
+
 		return "`$table`";
 
 	}
@@ -216,6 +229,18 @@ class WpdbConnection implements ConnectionInterface {
 	 * @todo handle alias
 	 **/
 	public function escapeColumn($column) {
+
+		if(is_a($column, 'Closure')) {
+			return $column->__invoke($this);
+		}
+
+		if(is_array($column)) {
+			if(!empty($column[0]) and !empty($column[1])) {
+				return "`{$column[0]}` as `{$column[1]}`";
+			} else {
+				throw new RuntimeException('Column aliases must have two parameters');
+			}
+		}
 
 		return "`$column`";
 
