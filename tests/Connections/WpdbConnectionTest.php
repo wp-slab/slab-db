@@ -211,6 +211,53 @@ class WpdbConnectionTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
+	 * Test the most basic type of query
+	 *
+	 * @return void
+	 **/
+	public function testBasicQuery() {
+
+		$raw_sql = 'select name from people';
+		$expected_results = 1;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('query')->once()->with($raw_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->query($raw_sql);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
+	 * Test the most basic type of query
+	 *
+	 * @return void
+	 **/
+	public function testBasicQueryParams() {
+
+		$raw_sql = 'select name from people where name = %s and age = %d';
+		$raw_params = ['john', 19];
+		$expected_sql = 'select name from people where name = "john" and age = 19';
+		$expected_results = 1;
+
+		$wpdb = m::mock('wpdb');
+		$wpdb->shouldReceive('prepare')->once()->with($raw_sql, $raw_params)->andReturn($expected_sql);
+		$wpdb->shouldReceive('query')->once()->with($expected_sql)->andReturn($expected_results);
+
+		$conn = new WpdbConnection($wpdb);
+		$output_results = $conn->query($raw_sql, $raw_params);
+
+		$this->assertEquals($expected_results, $output_results);
+
+	}
+
+
+
+	/**
 	 * Tear down tests
 	 *
 	 * @return void
