@@ -58,7 +58,7 @@ class WpdbConnectionTest extends PHPUnit_Framework_TestCase {
 
 		$conn = new WpdbConnection($wpdb);
 
-		$this->assertInstanceOf('Slab\DB\Compilers\MysqlCompiler', $conn->getCompiler());
+		$this->assertInstanceOf('Slab\DB\QueryCompilers\MysqlQueryCompiler', $conn->getCompiler());
 
 	}
 

@@ -5,7 +5,7 @@ namespace Slab\DB\Connections;
 use RuntimeException;
 use wpdb;
 
-use Slab\DB\Compilers\MysqlCompiler;
+use Slab\DB\QueryCompilers\MysqlQueryCompiler;
 
 /**
  * WPDB Connection
@@ -39,11 +39,11 @@ class WpdbConnection implements ConnectionInterface {
 	/**
 	 * Get compiler for this connection
 	 *
-	 * @return Slab\DB\Compilers\MysqlCompiler
+	 * @return Slab\DB\QueryCompilers\MysqlQueryCompiler
 	 **/
 	public function getCompiler() {
 
-		return new MysqlCompiler($this);
+		return new MysqlQueryCompiler($this);
 
 	}
 

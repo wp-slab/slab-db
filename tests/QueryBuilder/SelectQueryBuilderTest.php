@@ -21,7 +21,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	public function testCanInstantiateQuery() {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
-		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
+		$compiler = m::mock('Slab\DB\QueryCompilers\QueryCompilerInterface');
 
 		$query = new SelectQueryBuilder($db, $compiler);
 
@@ -39,7 +39,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 	public function testSelect() {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
-		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
+		$compiler = m::mock('Slab\DB\QueryCompilers\QueryCompilerInterface');
 
 		$query = new SelectQueryBuilder($db, $compiler);
 		$query->select('id', 'name');
@@ -59,7 +59,7 @@ class SelectQueryTest extends PHPUnit_Framework_TestCase {
 
 		$db = m::mock('Slab\DB\Connections\ConnectionInterface');
 
-		$compiler = m::mock('Slab\DB\Compilers\CompilerInterface');
+		$compiler = m::mock('Slab\DB\QueryCompilers\QueryCompilerInterface');
 		$compiler->shouldReceive('compileSelect')->once()->andReturn('select `id`, `name` from my_table');
 
 		$query = new SelectQueryBuilder($db, $compiler);

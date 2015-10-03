@@ -2,7 +2,7 @@
 
 namespace Slab\DB\Connections;
 
-use Slab\DB\Compilers\MysqlCompiler;
+use Slab\DB\QueryCompilers\MysqlQueryCompiler;
 
 /**
  * PDO Connection
@@ -16,7 +16,7 @@ class PdoConnection implements ConnectionInterface {
 	/**
 	 * Get compiler for this connection
 	 *
-	 * @return Slab\DB\Compilers\MysqlCompiler
+	 * @return Slab\DB\QueryCompilers\MysqlQueryCompiler
 	 **/
 	public function getCompiler() {
 

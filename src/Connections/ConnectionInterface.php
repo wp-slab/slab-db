@@ -14,7 +14,7 @@ interface ConnectionInterface {
 	/**
 	 * Get compiler for this connection
 	 *
-	 * @return Slab\DB\Compilers\MysqlCompiler
+	 * @return Slab\DB\QueryCompilers\QueryCompilerInterface
 	 **/
 	public function getCompiler();
 

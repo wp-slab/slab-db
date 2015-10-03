@@ -4,8 +4,8 @@ namespace Slab\DB\QueryBuilder;
 
 use LogicException;
 
-use Slab\DB\Compilers\CompilerInterface;
 use Slab\DB\Connections\ConnectionInterface;
+use Slab\DB\QueryCompilers\QueryCompilerInterface;
 
 /**
  * Select Query
@@ -24,7 +24,7 @@ class SelectQueryBuilder {
 
 
 	/**
-	 * @var Slab\DB\Compilers\CompilerInterface
+	 * @var Slab\DB\QueryCompilers\QueryCompilerInterface
 	 **/
 	protected $compiler;
 
@@ -87,10 +87,10 @@ class SelectQueryBuilder {
 	 * Constructor
 	 *
 	 * @param Slab\DB\Connections\ConnectionInterface
-	 * @param Slab\DB\Compilers\CompilerInterface
+	 * @param Slab\DB\QueryCompilers\QueryCompilerInterface
 	 * @return void
 	 **/
-	public function __construct(ConnectionInterface $db, CompilerInterface $compiler) {
+	public function __construct(ConnectionInterface $db, QueryCompilerInterface $compiler) {
 
 		$this->db = $db;
 		$this->compiler = $compiler;
