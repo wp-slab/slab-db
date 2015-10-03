@@ -141,7 +141,7 @@ class SelectQueryBuilder {
 	 **/
 	public function addSelect($field) {
 
-		$this->selects[] = $field; // @todo check?
+		$this->selects[] = $field;
 
 		return $this;
 
