@@ -23,59 +23,59 @@ interface ConnectionInterface {
 	 * Execute a general query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return bool Result
 	 **/
-	public function query($sql, array $values = null);
+	public function query($sql, array $params = null);
 
 
 	/**
 	 * Execute a SELECT query
 	 *
 	 * @param string SQL
-	 * @param array Query values
-	 * @return array [int Rows affected, int Insert ID]
+	 * @param array Query params
+	 * @return array Rows
 	 **/
-	public function select($sql, array $values = null);
+	public function select($sql, array $params = null);
 
 
 	/**
 	 * Execute an INSERT query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return array [int Rows affected, int Insert ID]
 	 **/
-	public function insert($sql, array $values = null);
+	public function insert($sql, array $params = null);
 
 
 	/**
 	 * Execute an UPDATE query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return int Rows affected
 	 **/
-	public function update($sql, array $values = null);
+	public function update($sql, array $params = null);
 
 
 	/**
 	 * Execute a DELETE query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return int Rows affected
 	 **/
-	public function delete($sql, array $values = null);
+	public function delete($sql, array $params = null);
 
 
 	/**
-	 * Escape a value ref
+	 * Escape a param ref
 	 *
-	 * @param string Value
-	 * @return string Escaped value
+	 * @param string Param
+	 * @return string Escaped param
 	 **/
-	public function escapeValue($value);
+	public function escapeParam($param);
 
 
 	/**
@@ -84,7 +84,7 @@ interface ConnectionInterface {
 	 * @param string Table
 	 * @return string Escaped table
 	 **/
-	public function escapeTable($value);
+	public function escapeTable($table);
 
 
 	/**
@@ -93,7 +93,7 @@ interface ConnectionInterface {
 	 * @param string Column
 	 * @return string Escaped column
 	 **/
-	public function escapeColumn($value);
+	public function escapeColumn($column);
 
 
 }

@@ -52,10 +52,14 @@ class WpdbConnection implements ConnectionInterface {
 	 * Execute a general query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return bool Result
 	 **/
-	public function query($sql, array $values = null) {
+	public function query($sql, array $params = null) {
+
+		if($params !== null) {
+			$sql = $this->escapeQuery($sql, $params);
+		}
 
 		return $this->getConnection()->get_results($sql);
 
@@ -67,13 +71,13 @@ class WpdbConnection implements ConnectionInterface {
 	 * Execute a SELECT query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return array Rows
 	 **/
-	public function select($sql, array $values = null) {
+	public function select($sql, array $params = null) {
 
-		if($values !== null) {
-			$sql = $this->escapeQuery($sql, $values);
+		if($params !== null) {
+			$sql = $this->escapeQuery($sql, $params);
 		}
 
 		return $this->getConnection()->get_results($sql);
@@ -86,10 +90,11 @@ class WpdbConnection implements ConnectionInterface {
 	 * Execute an INSERT query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return array [int Rows affected, int Insert ID]
+	 * @todo stub
 	 **/
-	public function insert($sql, array $values = null) {
+	public function insert($sql, array $params = null) {
 
 	}
 
@@ -99,10 +104,11 @@ class WpdbConnection implements ConnectionInterface {
 	 * Execute an UPDATE query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return int Rows affected
+	 * @todo stub
 	 **/
-	public function update($sql, array $values = null) {
+	public function update($sql, array $params = null) {
 
 	}
 
@@ -112,10 +118,11 @@ class WpdbConnection implements ConnectionInterface {
 	 * Execute a DELETE query
 	 *
 	 * @param string SQL
-	 * @param array Query values
+	 * @param array Query params
 	 * @return int Rows affected
+	 * @todo stub
 	 **/
-	public function delete($sql, array $values = null) {
+	public function delete($sql, array $params = null) {
 
 	}
 
@@ -125,27 +132,30 @@ class WpdbConnection implements ConnectionInterface {
 	 * Escape an sql query
 	 *
 	 * @param string Query
-	 * @return array Values
+	 * @param array Params
+	 * @return string Escaped query
 	 **/
-	public function escapeQuery($sql, array $values = null) {
+	public function escapeQuery($sql, array $params = null) {
 
-		if($values === null) {
+		if($params === null or empty($params)) {
 			return $sql;
 		}
 
-		return $this->getConnection()->prepare($sql, $values);
+		return $this->getConnection()->prepare($sql, $params);
 
 	}
 
 
 
 	/**
-	 * Escape a value ref
+	 * Escape a param ref
 	 *
-	 * @param string Value
-	 * @return string Escaped value
+	 * @param string Param
+	 * @return string Escaped param
 	 **/
-	public function escapeValue($value) {
+	public function escapeParam($param) {
+
+		return $this->getConnection()->_real_escape($param);
 
 	}
 
@@ -156,8 +166,12 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string Table
 	 * @return string Escaped table
+	 * @todo stub
+	 * @todo handle alias
 	 **/
-	public function escapeTable($value) {
+	public function escapeTable($table) {
+
+		return "`$table`";
 
 	}
 
@@ -168,8 +182,12 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string Column
 	 * @return string Escaped column
+	 * @todo stub
+	 * @todo handle alias
 	 **/
-	public function escapeColumn($value) {
+	public function escapeColumn($column) {
+
+		return "`$column`";
 
 	}
 
