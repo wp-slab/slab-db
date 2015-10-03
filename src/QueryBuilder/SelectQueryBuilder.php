@@ -439,8 +439,6 @@ class SelectQueryBuilder {
 	 **/
 	public function sql() {
 
-		// $compiler = new \Slab\DB\Compilers\MysqlCompiler($this->db);
-
 		return $this->compiler->compileSelect([
 			'from'   => $this->from,
 			'select' => $this->selects,
