@@ -433,29 +433,6 @@ class SelectQueryBuilder {
 
 
 	/**
-	 * Escape a raw SQL fragment
-	 *
-	 * @param string Raw SQL
-	 * @param mixed Params
-	 * @return string Escaped SQL
-	 **/
-	public function raw($sql) {
-
-
-		// @todo escape func_get_args
-
-
-		return function($sql) {
-
-		};
-
-		return $sql;
-
-	}
-
-
-
-	/**
 	 * Convert query to SQL
 	 *
 	 * @return string SQL
