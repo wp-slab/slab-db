@@ -62,7 +62,7 @@ class WpdbConnection implements ConnectionInterface {
 			$sql = $this->escapeQuery($sql, $params);
 		}
 
-		return $this->getConnection()->get_results($sql);
+		return $this->getConnection()->query($sql);
 
 	}
 
