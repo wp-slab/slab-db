@@ -209,6 +209,8 @@ class WpdbConnectionTest extends PHPUnit_Framework_TestCase {
 	}
 
 
+
+	/**
 	 * Tear down tests
 	 *
 	 * @return void
