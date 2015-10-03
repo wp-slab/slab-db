@@ -3,7 +3,10 @@
 namespace Slab\DB;
 
 use Slab\DB\Connections\WpdbConnection;
+use Slab\DB\QueryBuilder\DeleteQueryBuilder;
+use Slab\DB\QueryBuilder\InsertQueryBuilder;
 use Slab\DB\QueryBuilder\SelectQueryBuilder;
+use Slab\DB\QueryBuilder\UpdateQueryBuilder;
 
 /**
  * Database Connection Manager
@@ -31,8 +34,9 @@ class DatabaseManager {
 
 
 	/**
-	 * Make a Select Query
+	 * Get a select query builder
 	 *
+	 * @param mixed... Fields
 	 * @return Slab\DB\QueryBuilder\SelectQueryBuilder
 	 **/
 	public function select($field = null) {
@@ -52,6 +56,72 @@ class DatabaseManager {
 
 
 
+	/**
+	 * Get an insert query builder
+	 *
+	 * @param string Table name
+	 * @return Slab\DB\QueryBuilder\InsertQueryBuilder
+	 **/
+	public function insert($table = null) {
+
+		$connection = $this->connection();
+		$compiler = $connection->getCompiler();
+
+		$query = new InsertQueryBuilder($connection, $compiler);
+
+		if($table !== null) {
+			$query->table($table);
+		}
+
+		return $query;
+
+	}
+
+
+
+	/**
+	 * Get an update query builder
+	 *
+	 * @param string Table name
+	 * @return Slab\DB\QueryBuilder\UpdateQueryBuilder
+	 **/
+	public function update($table = null) {
+
+		$connection = $this->connection();
+		$compiler = $connection->getCompiler();
+
+		$query = new UpdateQueryBuilder($connection, $compiler);
+
+		if($table !== null) {
+			$query->table($table);
+		}
+
+		return $query;
+
+	}
+
+
+
+	/**
+	 * Get a delete query builder
+	 *
+	 * @param string Table name
+	 * @return Slab\DB\QueryBuilder\DeleteQueryBuilder
+	 **/
+	public function delete($table = null) {
+
+		$connection = $this->connection();
+		$compiler = $connection->getCompiler();
+
+		$query = new DeleteQueryBuilder($connection, $compiler);
+
+		if($table !== null) {
+			$query->table($table);
+		}
+
+		return $query;
+
+	}
 
 
 
