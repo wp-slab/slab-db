@@ -464,7 +464,7 @@ class SelectQueryBuilder {
 
 		$sql = $this->sql();
 
-		return $this->db->query($sql);
+		return $this->db->select($sql);
 
 	}
 
