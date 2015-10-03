@@ -44,9 +44,10 @@ interface ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return array [int Rows affected, int Insert ID]
+	 * @param bool Return insert ID
+	 * @return array|false [int Rows affected, int Insert ID]
 	 **/
-	public function insert($sql, array $params = null);
+	public function insert($sql, array $params = null, $fetch_insert_id = true);
 
 
 	/**
@@ -54,7 +55,7 @@ interface ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return int Rows affected
+	 * @return int|false Rows affected
 	 **/
 	public function update($sql, array $params = null);
 
@@ -64,7 +65,7 @@ interface ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return int Rows affected
+	 * @return int|false Rows affected
 	 **/
 	public function delete($sql, array $params = null);
 

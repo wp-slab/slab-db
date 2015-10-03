@@ -53,7 +53,7 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return bool Result
+	 * @return int|false Rows affected
 	 **/
 	public function query($sql, array $params = null) {
 
@@ -72,7 +72,7 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return array Rows
+	 * @return array|false Rows
 	 **/
 	public function select($sql, array $params = null) {
 
@@ -91,10 +91,26 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return array [int Rows affected, int Insert ID]
-	 * @todo stub
+	 * @param bool Return insert ID
+	 * @return array|false [int Rows affected, int Insert ID]
 	 **/
-	public function insert($sql, array $params = null) {
+	public function insert($sql, array $params = null, $fetch_insert_id = true) {
+
+		if($params !== null) {
+			$sql = $this->escapeQuery($sql, $params);
+		}
+
+		$conn = $this->getConnection();
+
+		$result = $conn->query($sql);
+
+		if($result === false) {
+			return false;
+		}
+
+		$insert_id = $fetch_insert_id ? (int) $conn->insert_id : null;
+
+		return [(int) $result, $insert_id];
 
 	}
 
@@ -105,10 +121,17 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return int Rows affected
-	 * @todo stub
+	 * @return int|false Rows affected
 	 **/
 	public function update($sql, array $params = null) {
+
+		if($params !== null) {
+			$sql = $this->escapeQuery($sql, $params);
+		}
+
+		$conn = $this->getConnection();
+
+		return $conn->query($sql);
 
 	}
 
@@ -119,10 +142,17 @@ class WpdbConnection implements ConnectionInterface {
 	 *
 	 * @param string SQL
 	 * @param array Query params
-	 * @return int Rows affected
-	 * @todo stub
+	 * @return int|false Rows affected
 	 **/
 	public function delete($sql, array $params = null) {
+
+		if($params !== null) {
+			$sql = $this->escapeQuery($sql, $params);
+		}
+
+		$conn = $this->getConnection();
+
+		return $conn->query($sql);
 
 	}
 
