@@ -1,6 +1,6 @@
 <?php
 
-namespace Slab\DB\Compilers;
+namespace Slab\DB\QueryCompilers;
 
 use Slab\DB\Connections\ConnectionInterface;
 
@@ -10,7 +10,7 @@ use Slab\DB\Connections\ConnectionInterface;
  * @package default
  * @author Luke Lanchester
  **/
-class MysqlCompiler implements CompilerInterface {
+class MysqlQueryCompiler implements QueryCompilerInterface {
 
 
 	/**
