@@ -25,3 +25,4 @@ include SLAB_DB_DIR . 'functions.php';
 
 // Hooks
 add_action('slab_init', 'Slab\DB\slab_db_init');
+add_action('slab_db_connections', 'Slab\DB\slab_db_default_connections');

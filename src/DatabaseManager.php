@@ -2,7 +2,8 @@
 
 namespace Slab\DB;
 
-use Slab\DB\Connections\WpdbConnection;
+use Closure;
+
 use Slab\DB\QueryBuilder\DeleteQueryBuilder;
 use Slab\DB\QueryBuilder\InsertQueryBuilder;
 use Slab\DB\QueryBuilder\SelectQueryBuilder;
@@ -18,6 +19,24 @@ class DatabaseManager {
 
 
 	/**
+	 * @var string Default connection group
+	 **/
+	protected $default = 'wpdb';
+
+
+	/**
+	 * @var array Connection definitions
+	 **/
+	protected $connections = [];
+
+
+	/**
+	 * @var array Connection instances
+	 **/
+	protected $_connections = [];
+
+
+	/**
 	 * Get a database connection
 	 *
 	 * @return Slab\DB\DatabaseConnection
@@ -25,9 +44,19 @@ class DatabaseManager {
 	 **/
 	public function connection($group = null) {
 
-		global $wpdb;
+		if($group === null) {
+			$group = $this->default;
+		}
 
-		return new WpdbConnection($wpdb);
+		if(array_key_exists($group, $this->_connections)) {
+			return $this->_connections[$group];
+		}
+
+		if(!array_key_exists($group, $this->connections)) {
+			throw new RuntimeException("Unknown database connection: $group");
+		}
+
+		return $this->_connections[$group] = $this->connections[$group]->__invoke();
 
 	}
 
@@ -196,6 +225,21 @@ class DatabaseManager {
 	public function deleteRaw($sql, array $params = null) {
 
 		return $this->connection()->delete($sql, $params);
+
+	}
+
+
+
+	/**
+	 * Register a connection
+	 *
+	 * @param string Group key
+	 * @param Closure Connection creator
+	 * @return void
+	 **/
+	public function addConnection($group, Closure $connection) {
+
+		$this->connections[$group] = $connection;
 
 	}
 
