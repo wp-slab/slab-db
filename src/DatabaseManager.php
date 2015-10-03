@@ -18,10 +18,13 @@ class DatabaseManager {
 	 * Get a database connection
 	 *
 	 * @return Slab\DB\DatabaseConnection
+	 * @todo set default to be global wpdb connection
 	 **/
 	public function connection($group = null) {
 
-		return new WpdbConnection;
+		global $wpdb;
+
+		return new WpdbConnection($wpdb);
 
 	}
 

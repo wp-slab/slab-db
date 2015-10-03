@@ -2,6 +2,8 @@
 
 namespace Slab\DB\Connections;
 
+use wpdb;
+
 use Slab\DB\Compilers\MysqlCompiler;
 
 /**
@@ -17,6 +19,20 @@ class WpdbConnection implements ConnectionInterface {
 	 * @var WPDB Connection
 	 **/
 	protected $connection;
+
+
+	/**
+	 * Constructor
+	 *
+	 * @param wpdb WPDB instance
+	 * @return void
+	 **/
+	public function __construct(wpdb $wpdb) {
+
+		$this->connection = $wpdb;
+
+	}
+
 
 
 	/**
@@ -166,13 +182,7 @@ class WpdbConnection implements ConnectionInterface {
 	 **/
 	public function getConnection() {
 
-		if($this->connection !== null) {
-			return $this->connection;
-		}
-
-		global $wpdb;
-
-		return $this->connection = $wpdb;
+		return $this->connection;
 
 	}
 
