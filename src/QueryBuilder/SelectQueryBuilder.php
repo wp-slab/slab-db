@@ -212,11 +212,6 @@ class SelectQueryBuilder {
 
 		$index = count($this->joins) - 1;
 
-		if($operator !== null and $field2 === null) {
-			$field2 = $operator;
-			$operator = '=';
-		}
-
 		$this->joins[$index][2] = [$field1, $operator, $field2];
 
 		return $this;
