@@ -31,6 +31,39 @@ class WpdbConnectionTest extends PHPUnit_Framework_TestCase {
 
 
 	/**
+	 * Test can get the underlying wpdb connection
+	 *
+	 * @return void
+	 **/
+	public function testCanGetUnderlyingConnection() {
+
+		$wpdb = m::mock('wpdb');
+
+		$conn = new WpdbConnection($wpdb);
+
+		$this->assertEquals($wpdb, $conn->getConnection());
+
+	}
+
+
+
+	/**
+	 * Test can get connection compiler
+	 *
+	 * @return void
+	 **/
+	public function testCanGetCompiler() {
+
+		$wpdb = m::mock('wpdb');
+
+		$conn = new WpdbConnection($wpdb);
+
+		$this->assertInstanceOf('Slab\DB\Compilers\MysqlCompiler', $conn->getCompiler());
+
+	}
+
+
+
 	 * Tear down tests
 	 *
 	 * @return void
