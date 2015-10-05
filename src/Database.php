@@ -10,12 +10,12 @@ use Slab\DB\QueryBuilder\SelectQueryBuilder;
 use Slab\DB\QueryBuilder\UpdateQueryBuilder;
 
 /**
- * Database Connection Manager
+ * Database Manager
  *
  * @package default
  * @author Luke Lanchester
  **/
-class DatabaseManager {
+class Database {
 
 
 	/**
